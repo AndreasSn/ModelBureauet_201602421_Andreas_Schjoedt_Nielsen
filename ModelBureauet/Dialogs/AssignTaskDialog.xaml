@@ -1,0 +1,68 @@
+﻿<Window x:Class="ModelBureauet.Dialogs.AssignTaskDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModelBureauet.Dialogs"
+        xmlns:modelBureauet="clr-namespace:ModelBureauet"
+        xmlns:models="clr-namespace:ModelBureauet.Models"
+        mc:Ignorable="d"
+        Title="AssignTaskDialog" Height="450" Width="800">
+    <Window.Resources>
+        <modelBureauet:Converter x:Key="Converter"></modelBureauet:Converter>
+        <models:Models x:Key="Models"></models:Models>
+        <models:IncomingTasks x:Key="IncomingTasks"></models:IncomingTasks>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding Path=AssignCommand}" CommandParameter="{Binding ElementName=modelGrid, Path=SelectedItem}">Assign model to task</Button>
+            <Button Command="{Binding Path=AssignInDatabaseCommand}" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource Converter}">
+                        <Binding Path="SelectedItem" ElementName="modelGrid"></Binding>
+                        <Binding Path="Content" ElementName="taskId"></Binding>
+
+                    </MultiBinding>
+                </Button.CommandParameter>
+            Add</Button>
+        </StackPanel>
+        <DataGrid Grid.RowSpan="2" Grid.Column="1" AutoGenerateColumns="False" Name="modelGrid" ItemsSource="{StaticResource Models}"
+                  SelectedItem="{Binding Path=CurrentModel}" SelectedIndex="{Binding Path=SelectedIndex}" IsSynchronizedWithCurrentItem="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Name" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Height" Binding="{Binding Path=Height}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Weight" Binding="{Binding Path=Weight}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Haircolour" Binding="{Binding Path=HairColour}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Column="2">
+            <TextBox Text="{Binding Path=CurrentTask.Costumer}"></TextBox>
+            <Label Name="taskId" Content="{Binding CurrentTask.IncomingTaskId}"></Label>
+        </StackPanel>
+
+        <DataGrid Name="assigns" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=AssignedModels}" IsSynchronizedWithCurrentItem="True">
+
+        </DataGrid>
+        <!--<DataGrid DataContext="{StaticResource IncomingTasks}" Grid.Column="2" AutoGenerateColumns="False" Name="taskGrid" ItemsSource="{Binding}" 
+                  SelectedItem="{Binding Path=CurrentTask}" SelectedIndex="{Binding Path=SelectedIndex}" IsSynchronizedWithCurrentItem="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Customer" Binding="{Binding Path=Costumer}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Location" Binding="{Binding Path=Location}"></DataGridTextColumn>
+                <DataGridTextColumn Width="1.5*" Header="Models needed" Binding="{Binding Path=NumberOfModels}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Job length" Binding="{Binding Path=NumberOfDays}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>-->
+    </Grid>
+</Window>
